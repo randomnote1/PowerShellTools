@@ -28,6 +28,7 @@
 function Out-ConsoleGraph
 {
     [CmdletBinding()]
+    [OutputType([System.Object[]])]
     param
     (
         [Parameter(
