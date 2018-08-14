@@ -20,6 +20,11 @@
     .EXAMPLE
         Get-Process | Out-ConsoleGraph -GraphProperty CPU -Property ProcessName,CPU
     
+    .EXAMPLE
+        Import-Module -Name SqlServer
+        $server = New-Object -TypeName Microsoft.SqlServer.Management.Smo -ArgumentList SqlServer1
+        $server.Databases | Out-ConsoleGraph -GraphProperty Size -Property Name,Size
+    
     .NOTES
         Credit:
             Jeffery Hicks
