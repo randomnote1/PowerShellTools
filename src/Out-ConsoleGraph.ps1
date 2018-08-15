@@ -91,16 +91,29 @@ function Out-ConsoleGraph
         {
             foreach ( $objectProperty in $Property )
             {
-                $currentLength = $data | Select-Object -ExpandProperty $objectProperty -ErrorAction SilentlyContinue | ForEach-Object -Process { $_.ToString().Length } | Sort-Object -Descending | Select-Object -First 1
-                $totalLength = $totalLength + $currentLength
+                # Get the length of the property name
+                $propertyNameLength = $objectProperty.Length
+                
+                # Get the longest value in the current property
+                $longestValueLength = $data | Select-Object -ExpandProperty $objectProperty -ErrorAction SilentlyContinue | ForEach-Object -Process { $_.ToString().Length } | Sort-Object -Descending | Select-Object -First 1
+
+                # If the property name is longer than the longest value
+                if ( $propertyNameLength -gt $longestValueLength )
+                {
+                    # Use the length of the propery name instead
+                    $longestValueLength = $propertyNameLength
+                }
+
+                # Add the length to the total length
+                $totalLength = $totalLength + $longestValueLength
             }
 
             # Add extra space for each property passed
-            $totalLength = $totalLength + ( $Property.Count * 1 )
+            $totalLength = $totalLength + ( $Property.Count * 2 )
         }
 
         # Get the remaining available window width, dividing by 100 to get a proportional width. Subtract 4 to add a little margin.
-        $available = ( $width - $totalLength - 4 ) / 100
+        $available = ( $width - $totalLength ) / 100
 
         foreach ($obj in $data)
         {
